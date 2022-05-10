@@ -1,12 +1,15 @@
 package comicsprocessor_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/jprieto92/marvel_kata_go/pkg/comicsprocessor"
+	"github.com/jprieto92/marvel_kata_go/pkg/model"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestGetComics(t *testing.T) {
@@ -35,6 +38,29 @@ func TestGetComics(t *testing.T) {
 		got, err := processor.GetAllComics()
 
 		want, _ := os.ReadFile("./testdata/comicsdb_response.json")
+		assertNonError(t, err)
+		assertResponse(t, got, string(want))
+	})
+}
+
+func TestGetComicsPublishedThisWeekUntilNow(t *testing.T) {
+	t.Run("return comics from this week until now", func(t *testing.T) {
+		server := makeServer()
+		defer server.Close()
+
+		processor, err := comicsprocessor.NewComicProcessor(server.URL)
+		assertNonError(t, err)
+		got, err := processor.GetComicsPublishedInWeekUntilTime(time.Date(2022, time.May, 10, 0, 0, 0, 0, time.UTC))
+
+		want, _ := json.Marshal([]model.Comic{{Name: "X-Men Unlimited Infinity Comic (2021) #34",
+			Date:   time.Date(2022, time.May, 9, 0, 0, 0, 0, time.UTC),
+			Prices: []model.Price{{PriceType: "printPrice", Value: 0.0}},
+			Urls:   []model.BuyUrl{{UrlType: "detail", Url: "http://marvel.com/comics/issue/101322/x-men_unlimited_infinity_comic_2021_34?utm_campaign=apiRef&utm_source=97f295907072a970c5df30d73d1f3816"}}},
+			{Name: "Spider-Verse Unlimited Infinity Comic (2022) #5",
+				Date:   time.Date(2022, time.May, 10, 0, 0, 0, 0, time.UTC),
+				Prices: []model.Price{{PriceType: "printPrice", Value: 0.0}},
+				Urls:   []model.BuyUrl{{UrlType: "detail", Url: "http://marvel.com/comics/issue/98596/spider-verse_unlimited_infinity_comic_2022_5?utm_campaign=apiRef&utm_source=97f295907072a970c5df30d73d1f3816"}}},
+		})
 		assertNonError(t, err)
 		assertResponse(t, got, string(want))
 	})
