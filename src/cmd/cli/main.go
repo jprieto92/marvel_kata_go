@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/jprieto92/marvel_kata_go/pkg/comics"
-	"github.com/jprieto92/marvel_kata_go/pkg/model"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/comics"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/model"
 	"log"
 	"os"
 	"time"

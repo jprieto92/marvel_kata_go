@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/jprieto92/marvel_kata_go/pkg/comics"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/comics"
 	"log"
 	"net/http"
 	"time"
