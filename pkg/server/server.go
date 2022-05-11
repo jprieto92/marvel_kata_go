@@ -1,51 +1,64 @@
 package server
 
 import (
+	"fmt"
 	"github.com/jprieto92/marvel_kata_go/pkg/comics"
+	"github.com/jprieto92/marvel_kata_go/pkg/model"
 	"log"
 	"net/http"
 	"time"
 )
 
-type server struct {
-	uridb string
+type DataBaseInfo interface {
+	GetDatabaseUri() string
 }
 
-func NewServer(uridb string) *server {
-	return &server{uridb: uridb}
+type MarvelDbInfo struct {
+	dbUri string
 }
 
-func (s *server) Listen() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			log.Println("Handling new request")
-			processor, err := comics.NewComicProcessor(s.uridb)
-			if err != nil {
-				log.Println("Error occurred when try to create dbprocessor", "Err:", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
+func NewMarvelDatabaseInfo() *MarvelDbInfo {
+	return &MarvelDbInfo{dbUri: model.MarvelDbUri}
+}
 
-			result, err := processor.GetComicsPublishedInWeekUntilTime(time.Now())
-			if err != nil {
-				log.Println("Error occurred when try to get comics published in this week", "Err:", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			log.Println("Comics published in this week retrieved successfully")
-			if result == "{}" {
-				w.WriteHeader(http.StatusNoContent)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(result))
+func (db *MarvelDbInfo) GetDatabaseUri() string {
+	return db.dbUri
+}
+
+type Server struct {
+	DbInfo DataBaseInfo
+}
+
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		log.Println("Handling new request")
+		processor, err := comics.NewComicProcessor(s.DbInfo.GetDatabaseUri())
+		if err != nil {
+			log.Println("Trying. Error when creating dbprocessor", "Err:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, http.StatusText(http.StatusInternalServerError))
 			return
 		}
-		log.Println("Method not allowed", "Method:", r.Method)
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	})
 
-	log.Println("Listening...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+		result, err := processor.GetComicsPublishedInWeekUntilTime(time.Now())
+		if err != nil {
+			log.Println("Trying. Error when getting published in this week", "Err:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, http.StatusText(http.StatusInternalServerError))
+			return
+		}
+		log.Println("Success. Comics published in this week retrieved")
+		if result == "[]" {
+			w.WriteHeader(http.StatusNoContent)
+			fmt.Fprintf(w, http.StatusText(http.StatusNoContent))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(result))
+		return
+	}
+	log.Println("Method not allowed", "Method:", r.Method)
+	w.WriteHeader(http.StatusMethodNotAllowed)
+	fmt.Fprintf(w, http.StatusText(http.StatusMethodNotAllowed))
+	return
 }

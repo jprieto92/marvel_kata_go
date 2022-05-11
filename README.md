@@ -49,5 +49,5 @@ To test this microservice, you can launch this commands:
 kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh
 
 ## And now, from this pod shell you can launch some curls commands to our deployed service:
-curl http://marvel-kata-service/
+curl http://marvel-kata-service/comics
 ```
