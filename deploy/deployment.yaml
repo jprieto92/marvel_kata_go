@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: marvel-kata-app
-          image: jprieto92/marvel-kata-go:1.0.0
+          image: jprieto92/marvel-kata-go:1.1.0
           ports:
             - containerPort: 8080
