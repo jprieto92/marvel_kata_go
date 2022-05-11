@@ -39,7 +39,7 @@ func TestGetComics(t *testing.T) {
 
 		want, _ := os.ReadFile("./testdata/comicsdb_response.json")
 		assertNonError(t, err)
-		assertResponse(t, got, string(want))
+		assertResponse(t, string(got), string(want))
 	})
 }
 

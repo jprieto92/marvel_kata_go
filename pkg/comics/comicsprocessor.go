@@ -10,13 +10,13 @@ import (
 	"time"
 )
 
-var (
-	ErrBadUri            = string("uri not valid")
-	ErrWithServer        = string("error when get comics from URI")
-	ErrStatusCodeNoOk    = string("statusCode received no ok")
-	ErrBodyResponse      = string("error when try to read response body")
-	ErrGettingAllComics  = string("error when try to get all comics")
-	ErrUnmarshallingJson = string("error when try unmarshalling comics")
+const (
+	ErrBadUri            = "uri not valid"
+	ErrWithServer        = "error when get comics from URI"
+	ErrStatusCodeNoOk    = "statusCode received no ok"
+	ErrBodyResponse      = "error when try to read response body"
+	ErrGettingAllComics  = "error when try to get all comics"
+	ErrUnmarshallingJson = "error when try unmarshalling comics"
 )
 
 //Processor saves comics dbendpoint URI
@@ -34,23 +34,23 @@ func NewComicProcessor(uri string) (*Processor, error) {
 }
 
 //GetAllComics retrieves all comics information of a week
-func (p *Processor) GetAllComics() (string, error) {
+func (p *Processor) GetAllComics() ([]byte, error) {
 	resp, err := http.Get(p.url)
 	defer resp.Body.Close()
 	if err != nil {
-		return "", fmt.Errorf("%v: %w", ErrWithServer, err)
+		return nil, fmt.Errorf("%v: %w", ErrWithServer, err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("%v: %w", ErrStatusCodeNoOk, err)
+		return nil, fmt.Errorf("%v: %w", ErrStatusCodeNoOk, err)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("%v: %w", ErrBodyResponse, err)
+		return nil, fmt.Errorf("%v: %w", ErrBodyResponse, err)
 	}
 
-	return string(body), nil
+	return body, nil
 }
 
 //GetComicsPublishedInWeekUntilTime retrieves all comics published in a wek until a certain time
@@ -60,8 +60,8 @@ func (p *Processor) GetComicsPublishedInWeekUntilTime(t time.Time) (string, erro
 		return "", fmt.Errorf("%v: %w", ErrGettingAllComics, err)
 	}
 
-	var marvelDb = model.MarvelDb{}
-	err = json.Unmarshal([]byte(response), &marvelDb)
+	marvelDb := model.MarvelDb{}
+	err = json.Unmarshal(response, &marvelDb)
 	if err != nil {
 		return "", fmt.Errorf("%v: %w", ErrUnmarshallingJson, err)
 	}

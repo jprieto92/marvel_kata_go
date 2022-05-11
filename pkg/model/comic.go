@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-var ErrMarshallingJson = string("error when try marshalling comics")
+const ErrMarshallingJson = "error when try marshalling comics"
 
 type ListComics []Comic
 
@@ -25,5 +25,5 @@ func (c *ListComics) EncodeComicListToJson() (string, error) {
 		return string(result), nil
 	}
 
-	return "{}", nil
+	return "[]", nil
 }
