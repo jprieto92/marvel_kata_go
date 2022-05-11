@@ -3,9 +3,9 @@ package comics_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jprieto92/marvel_kata_go/pkg/comics"
-	"github.com/jprieto92/marvel_kata_go/pkg/model"
-	"github.com/jprieto92/marvel_kata_go/pkg/utils"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/comics"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/model"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/utils"
 	"net/http"
 	"net/http/httptest"
 	"os"

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/jprieto92/marvel_kata_go/pkg/utils"
+	"github.com/jprieto92/marvel_kata_go/src/pkg/utils"
 	"time"
 )
 
