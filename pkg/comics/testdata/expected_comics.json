@@ -1,9 +1,0 @@
-name: X-Men Unlimited Infinity Comic (2021) #34
-        date: 2022-05-09T00:00:00-0400
-        prices:{printPrice, 0}
-        urls: {detail, http://marvel.com/comics/issue/101322/x-men_unlimited_infinity_comic_2021_34?utm_campaign=apiRef&utm_source=97f295907072a970c5df30d73d1f3816}
-
-name: Spider-Verse Unlimited Infinity Comic (2022) #5
-date: 2022-05-10T00:00:00-0400
-prices: {printPrice, 0}
-urls: {detail, http://marvel.com/comics/issue/98596/spider-verse_unlimited_infinity_comic_2022_5?utm_campaign=apiRef&utm_source=97f295907072a970c5df30d73d1f3816}
