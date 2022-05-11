@@ -17,5 +17,13 @@ spec:
       containers:
         - name: marvel-kata-app
           image: jprieto92/marvel-kata-go:1.1.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - all
           ports:
             - containerPort: 8080
