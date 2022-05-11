@@ -3,7 +3,7 @@ package comics
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jprieto92/marvel_kata_go/src/pkg/model"
+	"github.com/jprieto92/marvel_kata_go/pkg/model"
 	"io"
 	"net/http"
 	"net/url"

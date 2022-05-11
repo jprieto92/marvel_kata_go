@@ -26,3 +26,28 @@ In this version you have all the configuration files to deploy this tool as a k8
 
 This microservice waits your request to answer to you with the comics published this week until now.
 
+#### Build container
+
+```bash
+docker build --tag marvel-kata-k8s .
+docker tag 83cc2398895d jprieto92/marvel-kata-go:1.0.0
+docker push jprieto92/marvel-kata-go:1.0.0
+```
+
+#### Deploy and Test
+The container image of this microservice is available here: https://hub.docker.com/r/jprieto92/marvel-kata-go
+
+To deploy this microservice, you need to execute:
+
+```bash
+kubectl apply -f deploy/deployment.yaml
+kubectl apply -f deploy/service.yaml
+```
+
+To test this microservice, you can launch this commands:
+```bash
+kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh
+
+## And now, from this pod shell you can launch some curls commands to our deployed service:
+curl http://marvel-kata-service/
+```
