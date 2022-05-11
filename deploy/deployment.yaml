@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marvel-kata-deployment
+  labels:
+    app: marvel-kata-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marvel-kata-app
+  template:
+    metadata:
+      labels:
+        app: marvel-kata-app
+    spec:
+      containers:
+        - name: marvel-kata-app
+          image: jprieto92/marvel-kata-go:1.0.0
+          ports:
+            - containerPort: 8080
