@@ -5,11 +5,12 @@ import (
 	"time"
 )
 
-var ErrDecodingTimestamp = string("error when try to decode timestamp")
+const ErrDecodingTimestamp = "error when try to decode timestamp"
+const TimeLayout = "2006-01-02T15:04:05-0700"
 
 //ConvertTimestampToDate convert time from ISO8661 to time.Time()
 func ConvertTimestampToDate(timestamp string) (time.Time, error) {
-	t, err := time.Parse("2006-01-02T15:04:05-0700", timestamp)
+	t, err := time.Parse(TimeLayout, timestamp)
 	if err != nil {
 		return time.Time{}, fmt.Errorf("%v: %w", ErrDecodingTimestamp, err)
 	}
